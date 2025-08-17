@@ -1,7 +1,11 @@
-type Props = {}
 
-export default function LoginPage({}: Props) {
+import LoginForm from './login-form/login-form'
+
+
+export default function LoginPage() {
   return (
-    <div>LoginPage</div>
+    <div>
+      <LoginForm/>
+    </div>
   )
 }
