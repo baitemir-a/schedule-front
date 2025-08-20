@@ -1,21 +1,30 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from './login-form.module.scss'
 import Button from "../../../ui/button/button";
+import authService from "../../../services/auth-service";
+
 type Props = {};
 
 export default function LoginForm({}: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<{message:string}|null>(null)
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    console.log("Login attempt", { email, password });
-    
+
+  async function handleSubmit(e:Event) {
+    e.preventDefault()
+    setError(null)
+    try{
+      await authService.login({email, password})
+    }
+    catch(e){
+      setError(e as {message:string})
+    }
   }
 
   return (
     <div className={styles.container}>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form className={styles.form}>
         <h1 className={styles.title}>Login</h1>
 
         <div className={styles.field}>
@@ -47,8 +56,10 @@ export default function LoginForm({}: Props) {
             required
           />
         </div>
-
-        <Button type="submit" variant="main">Submit</Button>
+        {error?<p className={styles.error}>{error.message}</p>:null}
+        <Button
+          variant="main"
+          onClick={handleSubmit}>Submit</Button>
       </form>
     </div>
   );

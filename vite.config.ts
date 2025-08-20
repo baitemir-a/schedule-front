@@ -1,14 +1,10 @@
 import { VitePWA } from 'vite-plugin-pwa';
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    allowedHosts: ['3a9c2172e834.ngrok-free.app']
-  },
-  preview:{
-    allowedHosts: ['3a9c2172e834.ngrok-free.app']
+    host: true
   },
   plugins: [react(), VitePWA({
     registerType: 'autoUpdate',
@@ -23,8 +19,8 @@ export default defineConfig({
       name: 'schedule-front',
       short_name: 'schedule-front',
       description: 'schedule-front',
-      start_url: "https://73e5eb59cec3.ngrok-free.app",
-      display:"standalone",
+      start_url: "/login",
+      display: "standalone",
       theme_color: '#ffffff',
       icons: [
         {

@@ -5,7 +5,7 @@ type Props = {
     variant: 'main' | 'danger' | 'secondary'
     disabled?: boolean
     type?: "submit" | "reset" | "button"
-    onClick?: () => void
+    onClick?: (e:any) => void
 }
 
 export default function Button({ children, variant, type, disabled, onClick }: Props) {
