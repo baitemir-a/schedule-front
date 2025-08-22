@@ -2,22 +2,24 @@ import { useState } from "react";
 import styles from './login-form.module.scss'
 import Button from "../../../ui/button/button";
 import authService from "../../../services/auth-service";
+import { useNavigate } from "react-router-dom";
 
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<{message:string}|null>(null)
+  const [error, setError] = useState<{ message: string } | null>(null)
 
-
-  async function handleSubmit(e:Event) {
+  const navigate = useNavigate()
+  async function handleSubmit(e: Event) {
     e.preventDefault()
     setError(null)
-    try{
-      await authService.login({email, password})
+    try {
+      await authService.login({ email, password })
+      navigate("/")
     }
-    catch(e){
-      setError(e as {message:string})
+    catch (e) {
+      setError(e as { message: string })
     }
   }
 
@@ -55,7 +57,7 @@ export default function LoginForm() {
             required
           />
         </div>
-        {error?<p className={styles.error}>{error.message}</p>:null}
+        {error ? <p className={styles.error}>{error.message}</p> : null}
         <Button
           variant="main"
           onClick={handleSubmit}>Submit</Button>

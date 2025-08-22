@@ -6,6 +6,7 @@ import axios, {
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
 })
 
 let isRefreshing = false
@@ -25,9 +26,8 @@ const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue = []
 }
 
-
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem("accessToken")
+  const token = localStorage.getItem("jwt")
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -57,14 +57,14 @@ api.interceptors.response.use(
       isRefreshing = true
 
       try {
-        const refreshToken = localStorage.getItem("refreshToken")
         const { data } = await axios.post<{ accessToken: string }>(
           `${import.meta.env.VITE_API_URL}/auth/refresh`,
-          { refreshToken }
+          {},
+          { withCredentials: true }
         )
 
         const newToken = data.accessToken
-        localStorage.setItem("accessToken", newToken)
+        localStorage.setItem("jwt", newToken)
         api.defaults.headers.Authorization = `Bearer ${newToken}`
         processQueue(null, newToken)
 
@@ -72,8 +72,7 @@ api.interceptors.response.use(
         return api(originalRequest)
       } catch (err) {
         processQueue(err, null)
-        localStorage.removeItem("accessToken")
-        localStorage.removeItem("refreshToken")
+        localStorage.removeItem("jwt")
         return Promise.reject(err)
       } finally {
         isRefreshing = false
