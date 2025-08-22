@@ -3,9 +3,8 @@ import styles from './login-form.module.scss'
 import Button from "../../../ui/button/button";
 import authService from "../../../services/auth-service";
 
-type Props = {};
 
-export default function LoginForm({}: Props) {
+export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<{message:string}|null>(null)

@@ -1,6 +1,4 @@
-type Props = {}
-
-export default function QrPage({}: Props) {
+export default function QrPage() {
   return (
     <div>
         dasdasdsadasdasd
