@@ -4,6 +4,7 @@ import QrPage from './pages/qr/qr.tsx'
 import LoginPage from './pages/login/login.tsx'
 import { PrivateRoute } from './utils/private-route.tsx'
 import { PublicRoute } from './utils/public-route.tsx'
+import Scan from './pages/qr/scan/scan.tsx'
 
 
 function App() {
@@ -14,6 +15,11 @@ function App() {
         <Route path="/" element={
           <PrivateRoute>
             <QrPage />
+          </PrivateRoute>
+        } />
+        <Route path="/scan" element={
+          <PrivateRoute>
+            <Scan />
           </PrivateRoute>
         } />
         <Route path="*" element={<Navigate to="/" replace />} />
