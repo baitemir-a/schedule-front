@@ -4,4 +4,5 @@ export interface ILoginDto{
 }
 export interface ILoginResponse{
     accessToken:string
+    role:string
 }

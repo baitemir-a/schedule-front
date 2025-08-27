@@ -7,7 +7,9 @@ class AuthService {
     try {
       const res = await api.post<ILoginResponse>("/auth/login", data)
       const token = res.data.accessToken
+      const role = res.data.role
       localStorage.setItem("jwt", token)
+      localStorage.setItem("role", role)
       return res.data
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -26,6 +28,7 @@ class AuthService {
       const res = await api.get("/auth/isauth")
       return res.status === 200
     } catch {
+      localStorage.removeItem("jwt")
       throw new Error("Вы не авторизованы")
     }
   }
@@ -34,6 +37,7 @@ class AuthService {
       const res = await api.get("/auth/isadmin")
       return res.status === 200
     } catch {
+      localStorage.removeItem("role")
       throw new Error("Вы не админ")
     }
   }
