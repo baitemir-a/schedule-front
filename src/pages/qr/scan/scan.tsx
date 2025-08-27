@@ -72,6 +72,7 @@ export default function Scan() {
 
         // дебаунс 3с перед second
         timerRef.current = window.setTimeout(async () => {
+          toast(scanResult)
           try {
             await journalService.second(scanResult);
             setSecondScan(true);
