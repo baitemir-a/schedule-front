@@ -29,6 +29,14 @@ class AuthService {
       throw new Error("Вы не авторизованы")
     }
   }
+  async isAdmin(): Promise<boolean> {
+    try {
+      const res = await api.get("/auth/isadmin")
+      return res.status === 200
+    } catch {
+      throw new Error("Вы не админ")
+    }
+  }
 }
 
 export default new AuthService()

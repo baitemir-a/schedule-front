@@ -1,9 +1,10 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import PWABadge from './PWABadge.tsx'
 import LoginPage from './pages/login/login.tsx'
 import { PrivateRoute } from './utils/private-route.tsx'
 import { PublicRoute } from './utils/public-route.tsx'
 import { routes } from './const/routes.tsx'
+import { ToastContainer } from 'react-toastify'
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
         {routes.map((r) => {
           return (
             <Route path={r.link} element={
-              <PrivateRoute>
+              <PrivateRoute adminOnly={r.adminOnly}>
                 {r.component}
               </PrivateRoute>
             } />
@@ -28,6 +29,7 @@ function App() {
         } />
       </Routes>
       <PWABadge />
+      <ToastContainer />
     </>
   )
 }

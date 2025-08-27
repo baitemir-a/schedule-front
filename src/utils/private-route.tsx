@@ -1,21 +1,31 @@
 import { Navigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import authService from "../services/auth-service"
+import { toast } from "react-toastify"
 
 interface Props {
+  adminOnly?: boolean
   children: React.ReactNode
 }
 
-export const PrivateRoute: React.FC<Props> = ({ children }) => {
+export const PrivateRoute: React.FC<Props> = ({ children, adminOnly = false }) => {
   const [isAuth, setIsAuth] = useState<boolean | null>(null)
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await authService.isAuth()
-        setIsAuth(res)
+        const auth = await authService.isAuth()
+        setIsAuth(auth)
+        if (adminOnly) {
+          const admin = await authService.isAdmin()
+          setIsAdmin(admin)
+        }
+
       } catch {
         setIsAuth(false)
+        if (adminOnly)
+          setIsAdmin(false)
       }
     }
     checkAuth()
@@ -24,6 +34,21 @@ export const PrivateRoute: React.FC<Props> = ({ children }) => {
   if (isAuth === null) {
     return <div>Loading...</div>
   }
-
+  if (adminOnly) {
+    if (isAdmin && isAuth) {
+      return <>{children}</>
+    }
+    else {
+      return <NoAccess />
+    }
+  }
   return isAuth ? <>{children}</> : <Navigate to="/login" replace />
+}
+
+
+const NoAccess = () => {
+  useEffect(() => {
+    toast.error("У вас нет прав", { position: "bottom-center", theme: "light", toastId: "no-access" })
+  }, [])
+  return <Navigate to="/" replace />
 }

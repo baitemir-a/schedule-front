@@ -5,14 +5,15 @@ import Scan from "../pages/qr/scan/scan";
 export const routes = [
     {
         link:'/',
-        component: <QrPage/>
+        component: <QrPage/>,
     },
     {
         link:'/scan',
-        component: <Scan/>
+        component: <Scan/>,
     },
     {
         link:'/generate',
-        component: <Generate/>
+        component: <Generate/>,
+        adminOnly:true,
     }
 ]
