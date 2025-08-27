@@ -24,7 +24,7 @@ class AuthService {
   }
   async logout(){
     try {
-      await api.post<ILoginResponse>("/auth/log")
+      await api.post<ILoginResponse>("/auth/logout")
       localStorage.clear()
     } catch (err) {
       if (axios.isAxiosError(err)) {
