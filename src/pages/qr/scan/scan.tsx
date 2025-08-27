@@ -49,8 +49,8 @@ export default function Scan() {
     };
   }, [isRunning]);
   useEffect(() => {
-    const scanFn = async () => {
-      if (scanResult) {
+    const firstFn = async () => {
+      if (scanResult && !firstScan) {
         try {
           await journalService.first(scanResult)
           setFirstScan(true)
@@ -61,8 +61,23 @@ export default function Scan() {
         }
       }
     }
-    scanFn()
+    firstFn()
   }, [scanResult])
+  useEffect(()=>{
+    const secondFn = async () => {
+      if (scanResult && !secondScan) {
+        try {
+          await journalService.second(scanResult)
+          setSecondScan(true)
+        }
+        catch (e) {
+          toast.error((e as { message: string }).message, { theme: 'light', position: 'bottom-center', toastId: 'scan error' })
+          setFirstScan(false)
+        }
+      }
+    }
+    secondFn()
+  },[firstScan])
 
   return (
     <div className={styles.wrapper}>
