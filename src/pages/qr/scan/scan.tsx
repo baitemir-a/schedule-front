@@ -55,14 +55,10 @@ export default function Scan() {
   // first -> (debounce 3s) -> second
   useEffect(() => {
     if (!scanResult) return;
-
-    let cancelled = false;
-
     const run = async () => {
       try {
         if (!firstScan) {
           await journalService.first(scanResult);
-          if (cancelled) return;
           setFirstScan(true);
         }
 
@@ -73,19 +69,21 @@ export default function Scan() {
         }
 
         // дебаунс 3с перед second
-        timerRef.current = window.setTimeout(async () => {
-          toast(scanResult)
-          try {
-            await journalService.second(scanResult);
-            setSecondScan(true);
-          } catch (e) {
-            toast.error((e as { message: string }).message, {
-              theme: "light",
-              position: "bottom-center",
-              toastId: "scan-error-second",
-            });
-          }
-        }, 3000);
+        if (!secondScan) {
+          timerRef.current = window.setTimeout(async () => {
+            toast(scanResult)
+            try {
+              await journalService.second(scanResult);
+              setSecondScan(true);
+            } catch (e) {
+              toast.error((e as { message: string }).message, {
+                theme: "light",
+                position: "bottom-center",
+                toastId: "scan-error-second",
+              });
+            }
+          }, 3000);
+        }
       } catch (e) {
         toast.error((e as { message: string }).message, {
           theme: "light",
@@ -98,7 +96,6 @@ export default function Scan() {
     run();
 
     return () => {
-      cancelled = true;
       if (timerRef.current) {
         clearTimeout(timerRef.current);
         timerRef.current = null;
