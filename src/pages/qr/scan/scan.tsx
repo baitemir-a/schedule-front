@@ -64,9 +64,13 @@ export default function Scan() {
           setFirstScan(true);
           setTimeout(async () => {
             if (!secondScan) {
+              console.log("second scan", scanResult);
+              
               try {
-                await journalService.second(scanResult);
-                setSecondScan(true);
+                if (scanResult.length > 12) {
+                  await journalService.second(scanResult);
+                  setSecondScan(true);
+                }
               } catch (e) {
                 toast.error((e as { message: string }).message, {
                   theme: "light",
@@ -75,7 +79,7 @@ export default function Scan() {
                 });
               }
             }
-          }, 3000);
+          }, 5000);
         } catch (e) {
           toast.error((e as { message: string }).message, {
             theme: "light",
