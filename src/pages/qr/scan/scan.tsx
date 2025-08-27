@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader, IScannerControls } from "@zxing/browser";
 import { Result } from "@zxing/library";
 import styles from "./scan.module.scss";
+import journalService from "../../../services/journal-service";
+import { toast } from "react-toastify";
 
 export default function Scan() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -10,6 +12,8 @@ export default function Scan() {
   const [isRunning, setIsRunning] = useState(false);
   const [scanResult, setScanResult] = useState<string | null>(null);
   const [detected, setDetected] = useState(false);
+  const [firstScan, setFirstScan] = useState(false)
+  const [secondScan, setSecondScan] = useState(false)
 
   useEffect(() => {
     readerRef.current = new BrowserMultiFormatReader();
@@ -44,6 +48,21 @@ export default function Scan() {
       s?.getTracks().forEach(t => t.stop());
     };
   }, [isRunning]);
+  useEffect(() => {
+    const scanFn = async () => {
+      if (scanResult) {
+        try {
+          await journalService.first(scanResult)
+          setFirstScan(true)
+        }
+        catch (e) {
+          toast.error((e as { message: string }).message, { theme: 'light', position: 'bottom-center', toastId: 'scan error' })
+          setFirstScan(false)
+        }
+      }
+    }
+    scanFn()
+  }, [scanResult])
 
   return (
     <div className={styles.wrapper}>
@@ -68,6 +87,16 @@ export default function Scan() {
       {scanResult && (
         <div className={styles.resultBox}>
           <strong>Last scan:</strong> <a href={scanResult}>{scanResult}</a>
+        </div>
+      )}
+      {firstScan && (
+        <div className={styles.resultBox}>
+          <strong>First scan ✅</strong>
+        </div>
+      )}
+      {secondScan && (
+        <div className={styles.resultBox}>
+          <strong>Second scan ✅</strong>
         </div>
       )}
     </div>
