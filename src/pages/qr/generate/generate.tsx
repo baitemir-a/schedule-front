@@ -28,6 +28,7 @@ export default function Generate() {
         );
         console.log(eventSource);
         console.log(`${import.meta.env.VITE_API_URL}/events/subscribe`);
+        console.log(`${import.meta.env.VITE_API_URL}`);
         
 
         eventSource.onmessage = (e) => {
