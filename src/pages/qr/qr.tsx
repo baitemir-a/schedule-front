@@ -9,7 +9,7 @@ export default function QrPage() {
   async function logoutFn() {
     try {
       await authService.logout()
-      navigate("/")
+      navigate("/login")
     }
     catch (e) {
       toast.error((e as { message: string }).message, { theme: 'light', position: 'bottom-center', toastId: 'logout-error' })

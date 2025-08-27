@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
+import { EventSourcePolyfill } from 'event-source-polyfill';
+
 import styles from "./generate.module.scss";
 
 export default function Generate() {
@@ -19,7 +21,12 @@ export default function Generate() {
     setText(getTodayString());
 
     // подписка на события от бэка
-    const eventSource = new EventSource(`${import.meta.env.VITE_API_URL}/events/subscribe`);
+
+const eventSource = new EventSourcePolyfill(
+  `${import.meta.env.VITE_API_URL}/events/subscribe`,
+  { withCredentials: true }
+);
+
 
     eventSource.onmessage = (e) => {
       try {

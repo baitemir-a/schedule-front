@@ -17,24 +17,31 @@ export const PrivateRoute: React.FC<Props> = ({ children, adminOnly = false }) =
       try {
         const auth = await authService.isAuth()
         setIsAuth(auth)
+
         if (adminOnly) {
           const admin = await authService.isAdmin()
           setIsAdmin(admin)
+        } else if (adminOnly) {
+          setIsAdmin(false) // <- important
         }
-
       } catch {
         setIsAuth(false)
-        if (adminOnly)
-          setIsAdmin(false)
+        if (adminOnly) setIsAdmin(false)
       }
+
     }
     checkAuth()
-  }, [])
+  }, [adminOnly])
 
-  if (isAuth === null) {
+console.log(isAdmin, isAuth, adminOnly);
+
+  if (isAuth === null || (adminOnly && isAdmin === null)) {
     return <div>Loading...</div>
   }
+
   if (adminOnly) {
+    console.log(isAdmin);
+
     if (isAdmin && isAuth) {
       return <>{children}</>
     }
@@ -42,6 +49,7 @@ export const PrivateRoute: React.FC<Props> = ({ children, adminOnly = false }) =
       return <NoAccess />
     }
   }
+
   return isAuth ? <>{children}</> : <Navigate to="/login" replace />
 }
 
