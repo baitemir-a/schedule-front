@@ -16,83 +16,92 @@ export default function Scan() {
   const [firstScan, setFirstScan] = useState(false);
   const [secondScan, setSecondScan] = useState(false);
 
-  // Инициализация сканера
+  // чтобы чистить setTimeout при смене кода/размонтировании
+  const timerRef = useRef<number | null>(null);
+
+  // init
   useEffect(() => {
     readerRef.current = new BrowserMultiFormatReader();
-    return () => {
-      readerRef.current = null;
-    };
+    return () => { readerRef.current = null; };
   }, []);
 
-  // Запуск/остановка видео
+  // start/stop camera
   useEffect(() => {
     if (!isRunning || !videoRef.current || !readerRef.current) return;
-
     const reader = readerRef.current;
 
     reader
-      .decodeFromVideoDevice(undefined, videoRef.current, (res: Result | undefined, _, controls) => {
+      .decodeFromVideoDevice(undefined, videoRef.current, (res: Result | undefined, _r, controls) => {
         if (controls && !controlsRef.current) controlsRef.current = controls;
         if (res) {
           const text = res.getText();
-          setScanResult(text);
+          // не дёргай эффект, если строка не изменилась
+          setScanResult(prev => (prev === text ? prev : text));
           setDetected(true);
           setTimeout(() => setDetected(false), 1000);
         }
       })
-      .catch((e) => {
-        console.error("Failed to start scanner:", e);
-      });
+      .catch(e => console.error("Failed to start scanner:", e));
 
     return () => {
       controlsRef.current?.stop();
       controlsRef.current = null;
       const v = videoRef.current;
       const s = v?.srcObject as MediaStream | null;
-      s?.getTracks().forEach((t) => t.stop());
+      s?.getTracks().forEach(t => t.stop());
     };
   }, [isRunning]);
 
-  // Обработка сканов
+  // first -> (debounce 3s) -> second
   useEffect(() => {
     if (!scanResult) return;
 
-    const handleScans = async () => {
-      if (!firstScan) {
-        try {
-          await journalService.first(scanResult);
-          setFirstScan(true);
-          setTimeout(async () => {
-            if (!secondScan) {
-              console.log("second scan", scanResult);
-              
-              try {
-                if (scanResult.length > 12) {
-                  await journalService.second(scanResult);
-                  setSecondScan(true);
-                }
-              } catch (e) {
-                toast.error((e as { message: string }).message, {
-                  theme: "light",
-                  position: "bottom-center",
-                  toastId: "scan error",
-                });
-              }
-            }
-          }, 5000);
-        } catch (e) {
-          toast.error((e as { message: string }).message, {
-            theme: "light",
-            position: "bottom-center",
-            toastId: "scan error",
-          });
+    let cancelled = false;
+
+    const run = async () => {
+      try {
+        await journalService.first(scanResult);
+        if (cancelled) return;
+        setFirstScan(true);
+
+        // чистим прошлый таймер, если был
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+          timerRef.current = null;
         }
+
+        // дебаунс 3с перед second
+        timerRef.current = window.setTimeout(async () => {
+          try {
+            await journalService.second(scanResult);
+            setSecondScan(true);
+          } catch (e) {
+            toast.error((e as { message: string }).message, {
+              theme: "light",
+              position: "bottom-center",
+              toastId: "scan-error-second",
+            });
+          }
+        }, 3000);
+      } catch (e) {
+        toast.error((e as { message: string }).message, {
+          theme: "light",
+          position: "bottom-center",
+          toastId: "scan-error-first",
+        });
       }
     };
 
-    handleScans();
-  }, [scanResult, firstScan, secondScan]);
+    run();
 
+    return () => {
+      cancelled = true;
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [scanResult]);
 
   const isUrl = scanResult?.startsWith("http");
 
@@ -106,7 +115,13 @@ export default function Scan() {
 
       <div className={styles.controls}>
         {!isRunning ? (
-          <button className={styles.startBtn} onClick={() => setIsRunning(true)}>
+          <button className={styles.startBtn} onClick={() => {
+            // опционально: сбрасываем состояние перед новым раном
+            setFirstScan(false);
+            setSecondScan(false);
+            setScanResult(null);
+            setIsRunning(true);
+          }}>
             Start
           </button>
         ) : (
