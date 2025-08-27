@@ -1,9 +1,7 @@
-// Install: npm i @zxing/browser @zxing/library
-// Simple QR scanner: scans QR codes and logs results to console.
-
 import { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader, IScannerControls } from "@zxing/browser";
 import { Result } from "@zxing/library";
+import styles from "./scan.module.scss";
 
 export default function Scan() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -11,6 +9,7 @@ export default function Scan() {
   const controlsRef = useRef<IScannerControls | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [scanResult, setScanResult] = useState<string | null>(null);
+  const [detected, setDetected] = useState(false);
 
   useEffect(() => {
     readerRef.current = new BrowserMultiFormatReader();
@@ -28,8 +27,9 @@ export default function Scan() {
         if (controls && !controlsRef.current) controlsRef.current = controls;
         if (res) {
           const text = res.getText();
-          console.log("QR Code result:", text);
           setScanResult(text);
+          setDetected(true);
+          setTimeout(() => setDetected(false), 1000);
         }
       })
       .catch(e => {
@@ -46,28 +46,27 @@ export default function Scan() {
   }, [isRunning]);
 
   return (
-    <div className="mx-auto max-w-md p-4 space-y-4">
-      <h1 className="text-xl font-semibold">QR Scanner</h1>
+    <div className={styles.wrapper}>
+      <h1 className={styles.title}>QR Scanner</h1>
 
-      <div className="relative overflow-hidden rounded-2xl bg-black">
-        <video ref={videoRef} className="w-full h-[300px] object-cover" muted playsInline />
-        <div className="pointer-events-none absolute inset-0 ring-4 ring-white/20 rounded-2xl" />
+      <div className={`${styles.videoContainer} ${detected ? styles.detected : ""}`}>
+        <video ref={videoRef} className={styles.video} muted playsInline />
       </div>
 
-      <div className="flex gap-2">
+      <div className={styles.controls}>
         {!isRunning ? (
-          <button className="rounded-2xl px-4 py-2 bg-blue-600 text-white shadow" onClick={() => setIsRunning(true)}>
+          <button className={styles.startBtn} onClick={() => setIsRunning(true)}>
             Start
           </button>
         ) : (
-          <button className="rounded-2xl px-4 py-2 bg-gray-800 text-white shadow" onClick={() => setIsRunning(false)}>
+          <button className={styles.stopBtn} onClick={() => setIsRunning(false)}>
             Stop
           </button>
         )}
       </div>
 
       {scanResult && (
-        <div className="rounded-2xl border p-3 text-sm break-words">
+        <div className={styles.resultBox}>
           <strong>Last scan:</strong> <a href={scanResult}>{scanResult}</a>
         </div>
       )}
