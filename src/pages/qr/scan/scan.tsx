@@ -9,12 +9,14 @@ export default function Scan() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const readerRef = useRef<BrowserMultiFormatReader | null>(null);
   const controlsRef = useRef<IScannerControls | null>(null);
+
   const [isRunning, setIsRunning] = useState(false);
   const [scanResult, setScanResult] = useState<string | null>(null);
   const [detected, setDetected] = useState(false);
-  const [firstScan, setFirstScan] = useState(false)
-  const [secondScan, setSecondScan] = useState(false)
+  const [firstScan, setFirstScan] = useState(false);
+  const [secondScan, setSecondScan] = useState(false);
 
+  // Инициализация сканера
   useEffect(() => {
     readerRef.current = new BrowserMultiFormatReader();
     return () => {
@@ -22,10 +24,12 @@ export default function Scan() {
     };
   }, []);
 
+  // Запуск/остановка видео
   useEffect(() => {
     if (!isRunning || !videoRef.current || !readerRef.current) return;
 
     const reader = readerRef.current;
+
     reader
       .decodeFromVideoDevice(undefined, videoRef.current, (res: Result | undefined, _, controls) => {
         if (controls && !controlsRef.current) controlsRef.current = controls;
@@ -36,7 +40,7 @@ export default function Scan() {
           setTimeout(() => setDetected(false), 1000);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.error("Failed to start scanner:", e);
       });
 
@@ -45,39 +49,47 @@ export default function Scan() {
       controlsRef.current = null;
       const v = videoRef.current;
       const s = v?.srcObject as MediaStream | null;
-      s?.getTracks().forEach(t => t.stop());
+      s?.getTracks().forEach((t) => t.stop());
     };
   }, [isRunning]);
+
+  // Обработка сканов
   useEffect(() => {
-    const firstFn = async () => {
-      if (scanResult && !firstScan) {
+    if (!scanResult) return;
+
+    const handleScans = async () => {
+      if (!firstScan) {
         try {
-          await journalService.first(scanResult)
-          setFirstScan(true)
-        }
-        catch (e) {
-          toast.error((e as { message: string }).message, { theme: 'light', position: 'bottom-center', toastId: 'scan error' })
-          setFirstScan(false)
+          await journalService.first(scanResult);
+          setFirstScan(true);
+        } catch (e) {
+          toast.error((e as { message: string }).message, {
+            theme: "light",
+            position: "bottom-center",
+            toastId: "scan error",
+          });
+          return;
         }
       }
-    }
-    firstFn()
-  }, [scanResult])
-  useEffect(()=>{
-    const secondFn = async () => {
-      if (scanResult && !secondScan) {
+
+      if (firstScan && !secondScan) {
         try {
-          await journalService.second(scanResult)
-          setSecondScan(true)
-        }
-        catch (e) {
-          toast.error((e as { message: string }).message, { theme: 'light', position: 'bottom-center', toastId: 'scan error' })
-          setFirstScan(false)
+          await journalService.second(scanResult);
+          setSecondScan(true);
+        } catch (e) {
+          toast.error((e as { message: string }).message, {
+            theme: "light",
+            position: "bottom-center",
+            toastId: "scan error",
+          });
         }
       }
-    }
-    secondFn()
-  },[firstScan])
+    };
+
+    handleScans();
+  }, [scanResult, firstScan, secondScan]);
+
+  const isUrl = scanResult?.startsWith("http");
 
   return (
     <div className={styles.wrapper}>
@@ -101,7 +113,8 @@ export default function Scan() {
 
       {scanResult && (
         <div className={styles.resultBox}>
-          <strong>Last scan:</strong> <a href={scanResult}>{scanResult}</a>
+          <strong>Last scan:</strong>{" "}
+          {isUrl ? <a href={scanResult}>{scanResult}</a> : <span>{scanResult}</span>}
         </div>
       )}
       {firstScan && (
