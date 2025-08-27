@@ -22,6 +22,21 @@ class AuthService {
       }
     }
   }
+  async logout(){
+    try {
+      await api.post<ILoginResponse>("/auth/log")
+      localStorage.clear()
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const msg = err.response?.data?.message || err.message || "Login failed"
+        console.error("Login error:", msg)
+        throw new Error(msg)
+      } else {
+        console.error("Unexpected error:", err)
+        throw err
+      }
+    }
+  }
 
   async isAuth(): Promise<boolean> {
     try {
