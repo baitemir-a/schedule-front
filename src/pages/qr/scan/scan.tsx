@@ -62,20 +62,20 @@ export default function Scan() {
         try {
           await journalService.first(scanResult);
           setFirstScan(true);
-        } catch (e) {
-          toast.error((e as { message: string }).message, {
-            theme: "light",
-            position: "bottom-center",
-            toastId: "scan error",
-          });
-          return;
-        }
-      }
-
-      if (firstScan && !secondScan) {
-        try {
-          await journalService.second(scanResult);
-          setSecondScan(true);
+          setTimeout(async () => {
+            if (!secondScan) {
+              try {
+                await journalService.second(scanResult);
+                setSecondScan(true);
+              } catch (e) {
+                toast.error((e as { message: string }).message, {
+                  theme: "light",
+                  position: "bottom-center",
+                  toastId: "scan error",
+                });
+              }
+            }
+          }, 3000);
         } catch (e) {
           toast.error((e as { message: string }).message, {
             theme: "light",
@@ -88,6 +88,7 @@ export default function Scan() {
 
     handleScans();
   }, [scanResult, firstScan, secondScan]);
+
 
   const isUrl = scanResult?.startsWith("http");
 
