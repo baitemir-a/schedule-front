@@ -60,9 +60,11 @@ export default function Scan() {
 
     const run = async () => {
       try {
-        await journalService.first(scanResult);
-        if (cancelled) return;
-        setFirstScan(true);
+        if (!firstScan) {
+          await journalService.first(scanResult);
+          if (cancelled) return;
+          setFirstScan(true);
+        }
 
         // чистим прошлый таймер, если был
         if (timerRef.current) {
