@@ -56,7 +56,7 @@ console.log(isAdmin, isAuth, adminOnly);
 
 const NoAccess = () => {
   useEffect(() => {
-    toast.error("У вас нет прав", { position: "bottom-center", theme: "light", toastId: "no-access" })
+    toast.error("У вас нет прав", {toastId:"no acceess error"})
   }, [])
   return <Navigate to="/" replace />
 }

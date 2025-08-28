@@ -41,8 +41,7 @@ export default function FirstScan() {
           navigate("/scan/second", { state: { code: text } }); // передаём код во второй шаг
         } catch (e) {
           toast.error((e as { message: string }).message, {
-            theme: "light",
-            position: "bottom-center",
+            toastId:"first scan error"
           });
         }
       }

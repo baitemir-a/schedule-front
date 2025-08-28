@@ -29,7 +29,7 @@ function App() {
         } />
       </Routes>
       <PWABadge />
-      <ToastContainer />
+      <ToastContainer  theme='light' position='bottom-center' />
     </>
   )
 }

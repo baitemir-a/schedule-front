@@ -38,8 +38,7 @@ export default function SecondScan() {
           toast.success("Second scan ✅");
         } catch (e) {
           toast.error((e as { message: string }).message, {
-            theme: "light",
-            position: "bottom-center",
+            toastId:"second scan error"
           });
         }
       }

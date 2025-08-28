@@ -12,7 +12,7 @@ export default function QrPage() {
       navigate("/login")
     }
     catch (e) {
-      toast.error((e as { message: string }).message, { theme: 'light', position: 'bottom-center', toastId: 'logout-error' })
+      toast.error((e as { message: string }).message, { toastId: 'logout-error' })
     }
   }
   return (
