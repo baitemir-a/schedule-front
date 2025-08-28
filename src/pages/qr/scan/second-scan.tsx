@@ -10,39 +10,34 @@ export default function SecondScan() {
   const readerRef = useRef<BrowserMultiFormatReader | null>(null);
   const controlsRef = useRef<IScannerControls | null>(null);
 
-  const [isRunning, setIsRunning] = useState(false);
   const [scanResult, setScanResult] = useState<string | null>(null);
   const [detected, setDetected] = useState(false);
 
-  // init
   useEffect(() => {
     readerRef.current = new BrowserMultiFormatReader();
-    return () => { readerRef.current = null; };
-  }, []);
 
-  // start/stop
-  useEffect(() => {
-    if (!isRunning || !videoRef.current || !readerRef.current) return;
+    if (videoRef.current && readerRef.current) {
+      const reader = readerRef.current;
 
-    const reader = readerRef.current;
-    reader.decodeFromVideoDevice(undefined, videoRef.current, async (res: Result | undefined, _r, controls) => {
-      if (controls && !controlsRef.current) controlsRef.current = controls;
-      if (res) {
-        const text = res.getText();
-        setScanResult(prev => (prev === text ? prev : text));
-        setDetected(true);
-        setTimeout(() => setDetected(false), 1000);
+      reader.decodeFromVideoDevice(undefined, videoRef.current, async (res: Result | undefined, _r, controls) => {
+        if (controls && !controlsRef.current) controlsRef.current = controls;
+        if (res) {
+          const text = res.getText();
+          setScanResult(prev => (prev === text ? prev : text));
+          setDetected(true);
+          setTimeout(() => setDetected(false), 1000);
 
-        try {
-          await journalService.second(text);
-          toast.success("Second scan ✅");
-        } catch (e) {
-          toast.error((e as { message: string }).message, {
-            toastId:"second scan error"
-          });
+          try {
+            await journalService.second(text);
+            toast.success("Second scan ✅");
+          } catch (e) {
+            toast.error((e as { message: string }).message, {
+              toastId: "second scan error"
+            });
+          }
         }
-      }
-    }).catch(e => console.error("Failed to start scanner:", e));
+      }).catch(e => console.error("Failed to start scanner:", e));
+    }
 
     return () => {
       controlsRef.current?.stop();
@@ -51,7 +46,7 @@ export default function SecondScan() {
       const s = v?.srcObject as MediaStream | null;
       s?.getTracks().forEach(t => t.stop());
     };
-  }, [isRunning]);
+  }, []);
 
   return (
     <div className={styles.wrapper}>
@@ -59,14 +54,6 @@ export default function SecondScan() {
 
       <div className={`${styles.videoContainer} ${detected ? styles.detected : ""}`}>
         <video ref={videoRef} className={styles.video} muted playsInline />
-      </div>
-
-      <div className={styles.controls}>
-        {!isRunning ? (
-          <button onClick={() => { setScanResult(null); setIsRunning(true); }}>Start</button>
-        ) : (
-          <button onClick={() => setIsRunning(false)}>Stop</button>
-        )}
       </div>
 
       {scanResult && (
