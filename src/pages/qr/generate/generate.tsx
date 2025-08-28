@@ -52,7 +52,7 @@ export default function Generate() {
   }, []);
 
   return (
-    <div className={styles.wrapper}>
+    <div className='wrapper'>
       <h1 className={styles.title}>QR code</h1>
 
       <div className={styles.qrBox}>

@@ -1,3 +1,4 @@
+import Employees from "../pages/qr/emplyees/employees";
 import Generate from "../pages/qr/generate/generate";
 import QrPage from "../pages/qr/qr";
 import FirstScan from "../pages/qr/scan/first-scan";
@@ -20,5 +21,10 @@ export const routes = [
         link:'/generate',
         component: <Generate/>,
         adminOnly:true,
-    }
+    },
+    {
+        link:'/employees',
+        component: <Employees/>,
+        adminOnly:true,
+    },
 ]

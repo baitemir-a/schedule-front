@@ -50,7 +50,7 @@ export default function FirstScan() {
   }, [navigate]);
 
   return (
-    <div className={styles.wrapper}>
+    <div className='wrapper'>
       <h1 className={styles.title}>First Scan</h1>
 
       <div className={`${styles.videoContainer} ${detected ? styles.detected : ""}`}>

@@ -53,7 +53,7 @@ export default function SecondScan() {
   }, []);
 
   return (
-    <div className={styles.wrapper}>
+    <div className='wrapper'>
       <h1 className={styles.title}>Second Scan</h1>
 
       <div className={`${styles.videoContainer} ${detected ? styles.detected : ""}`}>
