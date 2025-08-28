@@ -24,7 +24,7 @@ export default function QrPage() {
         </div>
         :
         <div>
-          <div className={`${styles.btn} ${styles.scan}`}><Link to={'/scan'}>Сканировать QR</Link></div>
+          <div className={`${styles.btn} ${styles.scan}`}><Link to={'/scan/first'}>Сканировать QR</Link></div>
           <div className={`${styles.btn} ${styles.profile}`}><Link to={'/profile'}>Профиль</Link></div>
         </div>
       }
