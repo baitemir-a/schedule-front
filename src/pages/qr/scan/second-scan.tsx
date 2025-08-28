@@ -5,6 +5,7 @@ import styles from "./scan.module.scss";
 import journalService from "../../../services/journal-service";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Button from "../../../ui/button/button";
 
 export default function SecondScan() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -64,6 +65,7 @@ export default function SecondScan() {
           <strong>Last scan:</strong> {scanResult}
         </div>
       )}
+      <Button onClick={()=>navigate('/')} variant="secondary">Назад</Button>
     </div>
   );
 }

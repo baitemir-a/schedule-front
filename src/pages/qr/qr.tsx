@@ -28,7 +28,7 @@ export default function QrPage() {
           <div className={`${styles.btn} ${styles.profile}`}><Link to={'/profile'}>Профиль</Link></div>
         </div>
       }
-      <Button onClick={logoutFn} variant="secondary">Выйти</Button>
+      <Button onClick={logoutFn} variant="danger">Выйти</Button>
 
     </div>
   )

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./scan.module.scss";
 import journalService from "../../../services/journal-service";
 import { toast } from "react-toastify";
+import Button from "../../../ui/button/button";
 
 export default function FirstScan() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -55,6 +56,7 @@ export default function FirstScan() {
       <div className={`${styles.videoContainer} ${detected ? styles.detected : ""}`}>
         <video ref={videoRef} className={styles.video} muted playsInline />
       </div>
+      <Button onClick={()=>navigate('/')} variant="secondary">Назад</Button>
     </div>
   );
 }
