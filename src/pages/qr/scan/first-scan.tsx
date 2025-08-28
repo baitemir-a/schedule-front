@@ -29,7 +29,6 @@ export default function FirstScan() {
 
           try {
             await journalService.first(text);
-            toast.success("First scan ✅");
             navigate("/scan/second", { state: { code: text } });
           } catch (e) {
             toast.error((e as { message: string }).message, {

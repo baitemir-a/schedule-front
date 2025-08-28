@@ -4,6 +4,7 @@ import { Result } from "@zxing/library";
 import styles from "./scan.module.scss";
 import journalService from "../../../services/journal-service";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function SecondScan() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -13,6 +14,7 @@ export default function SecondScan() {
   const [scanResult, setScanResult] = useState<string | null>(null);
   const [detected, setDetected] = useState(false);
 
+  const navigate = useNavigate()
   useEffect(() => {
     readerRef.current = new BrowserMultiFormatReader();
 
@@ -29,7 +31,8 @@ export default function SecondScan() {
 
           try {
             await journalService.second(text);
-            toast.success("Second scan ✅");
+            toast.success("Вы отмечены ✅");
+            navigate("/profile")
           } catch (e) {
             toast.error((e as { message: string }).message, {
               toastId: "second scan error"
