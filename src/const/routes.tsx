@@ -1,6 +1,7 @@
 import Generate from "../pages/qr/generate/generate";
 import QrPage from "../pages/qr/qr";
-import Scan from "../pages/qr/scan/scan";
+import FirstScan from "../pages/qr/scan/first-scan";
+import SecondScan from "../pages/qr/scan/second-scan";
 
 export const routes = [
     {
@@ -8,8 +9,12 @@ export const routes = [
         component: <QrPage/>,
     },
     {
-        link:'/scan',
-        component: <Scan/>,
+        link:'/scan/first',
+        component: <FirstScan/>,
+    },
+    {
+        link:'/scan/second',
+        component: <SecondScan/>,
     },
     {
         link:'/generate',
