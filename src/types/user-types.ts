@@ -6,3 +6,7 @@ export interface IUser {
   avatar:string
   role:string
 }
+
+export interface IUserListFilter{
+  role?: 'admin' | 'user'
+}
