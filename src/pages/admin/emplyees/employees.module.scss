@@ -1,0 +1,13 @@
+@use '../../../const/_mixins.scss' as *;
+
+.container {
+  @include container;
+  .employeesList {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin: 20px 0;
+  }
+}

@@ -1,12 +1,7 @@
+@use '../../const/_mixins.scss' as *;
+
 .QrPage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 500px;
-  height: 100vh;
-  margin: 0 auto;
-  padding: 24px 8px;
+  @include container;
 
   .btn {
     border-radius: 8px;

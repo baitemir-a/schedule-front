@@ -4,35 +4,36 @@ import { useEffect, useState } from "react";
 import userService from "../../../services/user-service";
 import { IUser } from "../../../types/user-types";
 import styles from "./employees.module.scss";
+import { ProfileCard } from "../../../ui/profile-card/profile-card";
 
 export default function Employees() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [users, setUsers] = useState<IUser[]>([])
   const role = searchParams.get('role') || 'user'
-  useEffect(()=>{
+  useEffect(() => {
     const getUsersFn = async () => {
-      try{
-        const res = await userService.getUserList({role: role as 'admin'|'user'});
+      try {
+        const res = await userService.getUserList({ role: role as 'admin' | 'user' });
         setUsers(res)
       }
-      catch(e){
+      catch (e) {
         console.log(e);
       }
     }
     getUsersFn()
-  },[role])
+  }, [role])
 
   return (
-    <div className='wrapper'>
+    <div className={styles.container}>
       <h1>Список сотрудников</h1>
 
-      <div className={styles.employeesList}>
+      <div className={styles.employeesListControls}>
         <div>
           <label>Role: </label>
-          <select value={role} onChange={(e)=>{
+          <select value={role} onChange={(e) => {
             const value = e.target.value
-            setSearchParams((prev)=>{
+            setSearchParams((prev) => {
               const next = new URLSearchParams(prev)
               if (value) next.set('role', value)
               else next.delete('role')
@@ -43,18 +44,15 @@ export default function Employees() {
             <option value="admin">admin</option>
           </select>
         </div>
-        
-      {users.map((u)=>{
-        return <div className={styles.employeeCard}>
-          <p>{u.uuid}</p>
-          <p>{u.email}</p>
-          <p>{u.password}</p>
-          <p>{u.name}</p>
-          <p>{u.role}</p>
-          <img src={`${import.meta.env.VITE_API_URL}${u.avatar}`}/>
+
+        <div className={styles.employeesList}>
+        {users.map((u) => {
+          return (
+            <ProfileCard uuid={u.uuid} name={u.name} email={u.email} role={u.role} avatar={u.avatar} key={u.uuid} />
+          )
+        })}
         </div>
-      })}
-      <Button onClick={()=>navigate('/')} variant="secondary">Назад</Button>
+        <Button onClick={() => navigate('/')} variant="secondary">Назад</Button>
       </div>
     </div>
   );

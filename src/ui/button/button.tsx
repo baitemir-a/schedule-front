@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import './button.scss'
+import styles from './button.module.scss'
 type Props = {
     children: ReactNode
     variant: 'main' | 'danger' | 'secondary'
@@ -13,7 +13,7 @@ export default function Button({ children, variant, type, disabled, onClick }: P
         <button
             disabled={disabled}
             type={type}
-            className={'button ' + variant}
+            className={styles.button + ' ' + styles[variant]}
             onClick={onClick}>
             {children}
         </button>

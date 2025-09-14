@@ -1,4 +1,4 @@
-import Employees from "../pages/qr/emplyees/employees";
+import Employees from "../pages/admin/emplyees/employees";
 import Generate from "../pages/qr/generate/generate";
 import QrPage from "../pages/qr/qr";
 import FirstScan from "../pages/qr/scan/first-scan";
