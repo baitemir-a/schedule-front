@@ -33,15 +33,11 @@ export const PrivateRoute: React.FC<Props> = ({ children, adminOnly = false }) =
     checkAuth()
   }, [adminOnly])
 
-console.log(isAdmin, isAuth, adminOnly);
-
   if (isAuth === null || (adminOnly && isAdmin === null)) {
     return <div>Loading...</div>
   }
 
   if (adminOnly) {
-    console.log(isAdmin);
-
     if (isAdmin && isAuth) {
       return <>{children}</>
     }
@@ -56,7 +52,7 @@ console.log(isAdmin, isAuth, adminOnly);
 
 const NoAccess = () => {
   useEffect(() => {
-    toast.error("У вас нет прав", {toastId:"no acceess error"})
+    toast.error("У вас нет прав", { toastId: "no acceess error" })
   }, [])
   return <Navigate to="/" replace />
 }
