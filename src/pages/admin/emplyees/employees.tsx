@@ -29,8 +29,8 @@ export default function Employees() {
       <h1>Список сотрудников</h1>
 
       <div className={styles.employeesListControls}>
-        <div>
-          <label>Role: </label>
+        <div className={styles.roleFilter}>
+          <label>Role:</label>
           <select value={role} onChange={(e) => {
             const value = e.target.value
             setSearchParams((prev) => {
@@ -40,8 +40,8 @@ export default function Employees() {
               return next
             })
           }}>
-            <option value="user">user</option>
-            <option value="admin">admin</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
 
