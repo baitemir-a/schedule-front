@@ -125,7 +125,7 @@ export const CreateUser = () => {
           {action === "create" ? "Создать" : "Обновить"}
         </Button>
       </form>
-      <Button onClick={() => navigate("/employees")} variant="secondary">Назад</Button>
+      <Button onClick={() => navigate(-1)} variant="secondary">Назад</Button>
     </div>
   );
 };

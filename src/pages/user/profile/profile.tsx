@@ -33,6 +33,15 @@ export const Profile = () => {
         <p className={styles.role}>{profile.role}</p>
         <CopyText text={"uuid"} />
         <p className={styles.uuid}>{profile.uuid}</p>
+        <div className={styles.updateButton}>
+          <Button
+            onClick={() => navigate("/user/update/" + profile.uuid)}
+            full={false}
+            variant="main"
+          >
+            Редактировать
+          </Button>
+        </div>
       </div>
       <Button onClick={() => navigate("/")} variant="secondary">
         Назад
