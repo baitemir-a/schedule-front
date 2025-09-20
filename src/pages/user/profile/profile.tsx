@@ -9,6 +9,7 @@ import Button from "../../../ui/button/button";
 import { JournalSlider } from "../../../ui/journal-slider/journal-slider";
 import journalService from "../../../services/journal-service";
 import { IJournal } from "../../../types/journal-types";
+import { BackButton } from "../../../ui/back-button/back-button";
 
 
 export const Profile = () => {
@@ -60,9 +61,7 @@ export const Profile = () => {
         </div>
         <JournalSlider journal={journals} />
       </div>
-      <Button onClick={() => navigate("/")} variant="secondary">
-        Назад
-      </Button>
+      <BackButton />
     </div>
   );
 };

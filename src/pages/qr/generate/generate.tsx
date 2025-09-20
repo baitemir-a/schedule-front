@@ -3,8 +3,8 @@ import { QRCodeCanvas } from "qrcode.react";
 import { EventSourcePolyfill } from 'event-source-polyfill';
 
 import styles from "./generate.module.scss";
-import Button from "../../../ui/button/button";
 import { useNavigate } from "react-router-dom";
+import { BackButton } from "../../../ui/back-button/back-button";
 
 export default function Generate() {
   const [text, setText] = useState("");
@@ -62,7 +62,7 @@ export default function Generate() {
           <QRCodeCanvas value={text} size={200} level="H" />
         )}
       </div>
-      <Button onClick={()=>navigate('/')} variant="secondary">Назад</Button>
+      <BackButton />
     </div>
   );
 }

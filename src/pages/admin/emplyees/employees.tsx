@@ -5,6 +5,7 @@ import userService from "../../../services/user-service";
 import { IUser } from "../../../types/user-types";
 import styles from "./employees.module.scss";
 import { ProfileCard } from "../../../ui/profile-card/profile-card";
+import { BackButton } from "../../../ui/back-button/back-button";
 
 export default function Employees() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ export default function Employees() {
         })}
         </div>
       </div>
-      <Button onClick={() => navigate('/')} variant="secondary">Назад</Button>
+      <BackButton />
     </div>
   );
 }

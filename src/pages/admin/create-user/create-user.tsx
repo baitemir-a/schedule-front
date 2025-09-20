@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import userService from "../../../services/user-service";
 import { toast } from "react-toastify";
+import { BackButton } from "../../../ui/back-button/back-button";
 export const CreateUser = () => {
   const { uuid, action } = useParams();
   const [name, setName] = useState("");
@@ -125,7 +126,7 @@ export const CreateUser = () => {
           {action === "create" ? "Создать" : "Обновить"}
         </Button>
       </form>
-      <Button onClick={() => navigate(-1)} variant="secondary">Назад</Button>
+      <BackButton />
     </div>
   );
 };
