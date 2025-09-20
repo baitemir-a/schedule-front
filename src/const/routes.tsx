@@ -3,6 +3,7 @@ import Generate from "../pages/qr/generate/generate";
 import QrPage from "../pages/qr/qr";
 import FirstScan from "../pages/qr/scan/first-scan";
 import SecondScan from "../pages/qr/scan/second-scan";
+import { Profile } from "../pages/user/profile/profile";
 
 export const routes = [
     {
@@ -26,5 +27,10 @@ export const routes = [
         link:'/employees',
         component: <Employees/>,
         adminOnly:true,
+    },
+    {
+        link:'/profile',
+        component: <Profile/>,
+        adminOnly:false,
     },
 ]

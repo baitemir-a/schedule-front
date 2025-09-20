@@ -2,9 +2,9 @@ import { toast } from "react-toastify"
 import api from "../const/api"
 import { IUserListFilter } from "../types/user-types"
 
-class UserService{
-  async getUserList(filter: IUserListFilter = {}){
-    try{
+class UserService {
+  async getUserList(filter: IUserListFilter = {}) {
+    try {
       const params = new URLSearchParams()
       Object.entries(filter).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
@@ -15,8 +15,18 @@ class UserService{
       const res = await api.get(`/users${query ? `?${query}` : ""}`)
       return res.data
     }
-    catch(e){
-      const error = e as {message:string}
+    catch (e) {
+      const error = e as { message: string }
+      toast.error(error.message)
+    }
+  }
+  async getProfile() {
+    try {
+      const res = await api.get(`/users/profile`)
+      return res.data
+    }
+    catch (e) {
+      const error = e as { message: string }
       toast.error(error.message)
     }
   }
