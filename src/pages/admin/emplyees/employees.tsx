@@ -27,9 +27,7 @@ export default function Employees() {
   return (
     <div className={`${styles.container} wrapper`}>
       <h1>Список сотрудников</h1>
-
-      <div className={styles.employeesListControls}>
-        <div className={styles.roleFilter}>
+      <div className={styles.roleFilter}>
           <label>Role:</label>
           <select value={role} onChange={(e) => {
             const value = e.target.value
@@ -43,12 +41,17 @@ export default function Employees() {
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
+          <Button onClick={() => navigate('/user/create')} full={false} variant="main">Новый сотрудник</Button>
         </div>
+      <div className={styles.employeesListControls}>
+        
 
         <div className={styles.employeesList}>
         {users.map((u) => {
           return (
-            <ProfileCard uuid={u.uuid} name={u.name} email={u.email} role={u.role} avatar={u.avatar} key={u.uuid} />
+            <ProfileCard uuid={u.uuid} name={u.name} email={u.email} role={u.role} avatar={u.avatar} key={u.uuid} onDelete={() => {
+              setUsers(users.filter((user) => user.uuid !== u.uuid))
+            }} />
           )
         })}
         </div>

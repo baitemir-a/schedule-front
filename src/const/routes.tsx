@@ -1,3 +1,4 @@
+import { CreateUser } from "../pages/admin/create-user/create-user";
 import Employees from "../pages/admin/emplyees/employees";
 import Generate from "../pages/qr/generate/generate";
 import QrPage from "../pages/qr/qr";
@@ -38,4 +39,15 @@ export const routes = [
         component: <Profile/>,
         adminOnly:false,
     },
+    {
+        link:'/user/:action',
+        component: <CreateUser/>,
+        adminOnly:true,
+    },
+    {
+        link:'/user/:action/:uuid',
+        component: <CreateUser/>,
+        adminOnly:false,
+    },
+    
 ]
