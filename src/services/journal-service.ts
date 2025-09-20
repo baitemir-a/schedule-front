@@ -30,5 +30,23 @@ class JournalService {
 			}
 		}
 	}
+	async getJournal(uuid: string) {
+		try {
+			const res = await api.get(`/journal/user/${uuid}`)
+			return res.data
+		} catch (err) {
+			console.error("Unexpected error:", err)
+			throw err
+		}
+	}
+	async getMyJournal() {
+		try {
+			const res = await api.get(`/journal/my`)
+			return res.data
+		} catch (err) {
+			console.error("Unexpected error:", err)
+			throw err
+		}
+	}
 }
 export default new JournalService()

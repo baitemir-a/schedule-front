@@ -6,16 +6,32 @@ import styles from "./profile.module.scss";
 import { CopyText } from "../../../ui/copy-text/copy-text";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../ui/button/button";
+import { JournalSlider } from "../../../ui/journal-slider/journal-slider";
+import journalService from "../../../services/journal-service";
+import { IJournal } from "../../../types/journal-types";
+
 
 export const Profile = () => {
   const [profile, setProfile] = useState<IUser | null>(null);
+  const [journals, setJournals] = useState<IJournal[] | null>(null);
   const navigate = useNavigate();
+  const { uuid } = useParams();
+
   useEffect(() => {
     userService.getProfile().then((profile) => {
       setProfile(profile);
     });
+    if (!uuid) {
+      journalService.getMyJournal().then((journal) => {
+        setJournals(journal);
+      });
+    }
+    else {
+      journalService.getJournal(uuid).then((journal) => {
+        setJournals(journal);
+      });
+    }
   }, []);
-  const { uuid } = useParams();
   useEffect(() => {
     if (uuid) {
       userService.getUser(uuid).then((user) => {
@@ -42,6 +58,7 @@ export const Profile = () => {
             Редактировать
           </Button>
         </div>
+        <JournalSlider journal={journals} />
       </div>
       <Button onClick={() => navigate("/")} variant="secondary">
         Назад
