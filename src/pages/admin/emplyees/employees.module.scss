@@ -5,6 +5,8 @@
   .employeesListControls {
     width: 100%;
     margin: 20px auto;
+    overflow-y: scroll;
+    max-height: 80vh;
     
     .roleFilter {
       display: flex;

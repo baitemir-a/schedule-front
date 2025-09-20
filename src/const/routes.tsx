@@ -29,6 +29,11 @@ export const routes = [
         adminOnly:true,
     },
     {
+        link:'/profile/:uuid',
+        component: <Profile/>,
+        adminOnly:true,
+    },
+    {
         link:'/profile',
         component: <Profile/>,
         adminOnly:false,

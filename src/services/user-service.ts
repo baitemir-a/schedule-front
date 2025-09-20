@@ -30,6 +30,16 @@ class UserService {
       toast.error(error.message)
     }
   }
+  async getUser(uuid: string) {
+    try {
+      const res = await api.get(`/users/${uuid}`)
+      return res.data
+    }
+  catch (e) {
+    const error = e as { message: string }
+      toast.error(error.message)
+    }
+  }
 }
 
 export default new UserService()

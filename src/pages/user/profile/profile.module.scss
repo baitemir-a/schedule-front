@@ -2,9 +2,6 @@
 @use '../../../const/_variables.scss' as *;
 .profile {
   @include container;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   .name{
     margin-top: 24px;
   }

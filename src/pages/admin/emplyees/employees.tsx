@@ -25,7 +25,7 @@ export default function Employees() {
   }, [role])
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} wrapper`}>
       <h1>Список сотрудников</h1>
 
       <div className={styles.employeesListControls}>
@@ -52,8 +52,8 @@ export default function Employees() {
           )
         })}
         </div>
-        <Button onClick={() => navigate('/')} variant="secondary">Назад</Button>
       </div>
+      <Button onClick={() => navigate('/')} variant="secondary">Назад</Button>
     </div>
   );
 }

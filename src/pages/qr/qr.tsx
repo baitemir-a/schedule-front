@@ -16,7 +16,7 @@ export default function QrPage() {
     }
   }
   return (
-    <div className={styles.QrPage}>
+    <div className={`${styles.QrPage} wrapper`}>
       {role === 'admin' ?
         <div>
           <div className={`${styles.btn} ${styles.generate}`}><Link to={'/generate'}>Открыть QR</Link></div>
